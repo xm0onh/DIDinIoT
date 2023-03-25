@@ -9,6 +9,11 @@ import {
   ICredentialPlugin,
 } from "@veramo/core";
 
+import {
+  CredentialIssuerEIP712,
+  ICredentialIssuerEIP712,
+} from "@veramo/credential-eip712";
+
 import { Web3Provider } from "@ethersproject/providers";
 import { Contract, ContractFactory } from "@ethersproject/contracts";
 import { EthereumDIDRegistry } from "ethr-did-resolver";
@@ -48,7 +53,11 @@ import {
 
 // TypeORM is installed with `@veramo/data-store`
 import { DataSource } from "typeorm";
+import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
 
+dotenv.config();
 // This will be the name for the local sqlite database for demo purposes
 const DATABASE_FILE = "database.sqlite";
 
@@ -59,7 +68,21 @@ const DATABASE_FILE = "database.sqlite";
 const KMS_SECRET_KEY =
   "6a8e08d87c65354d21116708823aa620e266b860b1b01a0733b7a01a2fab1bcf";
 
-const { provider, registry } = await createGanacheProvider();
+const registryAddress = process.env.REGISTRY_ADDRESS;
+console.log(registryAddress);
+
+let provider, registry;
+if (!registryAddress) {
+  ({ provider, registry } = await createGanacheProvider());
+  updateRegistryAddressInEnvFile(registry);
+} else {
+  // If registry address exists, use the existing provider and registry
+  provider = new Web3Provider(
+    new Web3("http://10.0.0.98:8545").currentProvider as any
+  );
+  registry = registryAddress;
+}
+
 // const ethersProvider = createEthersProvider();
 
 const dbConnection = new DataSource({
@@ -78,7 +101,8 @@ export const agent = createAgent<
     IDataStore &
     IDataStoreORM &
     IResolver &
-    ICredentialPlugin
+    ICredentialPlugin &
+    ICredentialIssuerEIP712
 >({
   plugins: [
     new KeyManager({
@@ -99,8 +123,8 @@ export const agent = createAgent<
             {
               name: "ganache",
               chainId: 1337,
-              provider,
-              registry,
+              provider: provider,
+              registry: registry, // set the `registry` property to the address of the deployed contract
             },
           ],
         }),
@@ -112,19 +136,19 @@ export const agent = createAgent<
           networks: [
             {
               name: "ganache",
-              url: "http://localhost:8545",
+              url: "http://10.0.0.98:8545",
               chainId: 1337,
               provider,
               registry,
             },
           ],
         }),
-        ...webDidResolver(),
       }),
     }),
     new CredentialPlugin(),
     new DataStore(dbConnection),
     new DataStoreORM(dbConnection),
+    new CredentialIssuerEIP712(),
   ],
 });
 
@@ -136,14 +160,23 @@ async function createGanacheProvider(): Promise<{
   const provider = new Web3Provider(pr.currentProvider as any);
   await provider.ready;
   const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(
-    provider.getSigner(0)
+    provider.getSigner(1)
   );
   let registryContract: Contract = await factory.deploy();
   registryContract = await registryContract.deployed();
 
   await registryContract.deployTransaction.wait();
-
   const registry = registryContract.address;
 
   return { provider, registry };
+}
+
+function updateRegistryAddressInEnvFile(address: any) {
+  const envFilePath = path.resolve(process.cwd(), ".env");
+  const content = fs.readFileSync(envFilePath, "utf-8");
+  const newContent = content.replace(
+    /(REGISTRY_ADDRESS=)(.*)/g,
+    `$1${address}`
+  );
+  fs.writeFileSync(envFilePath, newContent, "utf-8");
 }

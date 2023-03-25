@@ -1,12 +1,26 @@
+/*
+This configuration sets the rootDir to "src", which should be the folder containing your TypeScript source files. 
+The baseUrl is set to the project root, and paths is configured to map imports to the "src" folder. 
+The outDir setting specifies "dist" as the output directory for the compiled JavaScript files. 
+The include and exclude settings specify which files should be included and excluded from the compilation, respectively.
+*/
+
 {
   "compilerOptions": {
     "preserveConstEnums": true,
     "strict": true,
     "target": "esnext",
     "module": "esnext",
-    "rootDir": "./",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "downlevelIteration": true
-  }
+    "downlevelIteration": true,
+    "baseUrl": "./",
+    "outDir": "dist",
+    "rootDir": "src",
+    "paths": {
+      "*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
