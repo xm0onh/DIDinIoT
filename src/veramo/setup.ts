@@ -38,8 +38,7 @@ import { CredentialPlugin } from "@veramo/credential-w3c";
 import { DIDResolverPlugin } from "@veramo/did-resolver";
 import { Resolver } from "did-resolver";
 import { getResolver as ethrDidResolver } from "ethr-did-resolver";
-import { getResolver as webDidResolver } from "web-did-resolver";
-// import { createEthersProvider } from "../utils/ethers-provider";
+
 // Storage plugin using TypeOrm
 import {
   Entities,
@@ -69,7 +68,6 @@ const KMS_SECRET_KEY =
   "6a8e08d87c65354d21116708823aa620e266b860b1b01a0733b7a01a2fab1bcf";
 
 const registryAddress = process.env.REGISTRY_ADDRESS;
-console.log(registryAddress);
 
 let provider, registry;
 if (!registryAddress) {
@@ -138,8 +136,8 @@ export const agent = createAgent<
               name: "ganache",
               url: "http://10.0.0.98:8545",
               chainId: 1337,
-              provider,
-              registry,
+              provider: provider,
+              registry: registry,
             },
           ],
         }),

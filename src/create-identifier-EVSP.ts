@@ -5,15 +5,8 @@ async function main() {
     .didManagerCreate({
       alias: "EV",
       provider: "did:ethr:ganache",
-
       options: {
-        sign: true,
-        customDocumentFields: {
-          manufacturer: "Tesla",
-        },
-        CustomElementRegistry: {
-          manufacturer: "Tesla",
-        },
+        sign: false,
       },
       kms: "local",
     })

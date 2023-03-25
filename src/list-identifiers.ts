@@ -5,7 +5,7 @@ async function main() {
 
   // console.log(`There are ${identifiers.length} identifiers`);
   const didUrl =
-    "did:ethr:ganache:0x022861ba7a9e348f60ccf53f23d4ed0d620cb69ca7b2f78b2f11a4d69c8962fbdf";
+    "did:ethr:ganache:0x02380caec8da9d67bab48fcf719798f617674483e54d8d2b29196c9cb818d127d0";
   const didDoc = (await agent.resolveDid({ didUrl })).didDocument;
   console.log(didDoc);
 }

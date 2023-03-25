@@ -1,13 +1,70 @@
+import express, { Request, Response } from "express";
 import sqlite3 from "sqlite3";
-const { Database } = sqlite3;
-// Open a SQLite database, stored in the file db.sqlite
-const db = new Database("database.sqlite");
-let claims: any[] = [];
-// Fetch a random integer between -99 and +99
+import { agent } from "./veramo/setup";
 
-// get all the rows in the table named "claim" and print them
-db.all("SELECT * FROM claim", (_, res) => {
-  claims.push(res);
-  console.log(claims);
+const app = express();
+const port = 8085;
+
+const db = new sqlite3.Database("database.sqlite", (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log("Connected to the database.");
 });
-console.log(claims);
+
+app.use(express.json());
+app.set("json spaces", 2);
+// Get EV credential by hash
+app.get("/EV/:hash", async (req: Request, res: Response) => {
+  const hash = req.params.hash;
+  const row = await new Promise<any>((resolve, reject) => {
+    db.get("SELECT raw FROM credential WHERE hash = ?", [hash], (err, row) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(row);
+    });
+  });
+
+  if (row) {
+    res.json(JSON.parse(row.raw));
+  } else {
+    res.status(404).send("Credential not found");
+  }
+});
+
+// Get EVSP credential by hash
+app.get("/EVSP/:hash", async (req: Request, res: Response) => {
+  const hash = req.params.hash;
+  const row = await new Promise<any>((resolve, reject) => {
+    db.get("SELECT raw FROM credential WHERE hash = ?", [hash], (err, row) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(row);
+    });
+  });
+
+  if (row) {
+    res.json(JSON.parse(row.raw));
+  } else {
+    res.status(404).send("Credential not found");
+  }
+});
+
+// Verify VC
+// app.post("/verify", async (req: Request, res: Response) => {
+//   try {
+//     const credential = req.body as VerifiableCredential;
+//     const result = await agent.verifyCredential({
+//       verifiableCredential: credential,
+//     });
+//     res.json({ verified: result.verified });
+//   } catch (err) {
+//     res.status(500).send("Verification failed: " + err.message);
+//   }
+// });
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});

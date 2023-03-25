@@ -2,15 +2,21 @@ import { agent } from "./veramo/setup.js";
 
 async function main() {
   const identifier = await agent.didManagerGetByAlias({ alias: "EV" });
-
   const verifiableCredential = await agent.createVerifiableCredential({
     credential: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
       issuer: { id: identifier.did },
       credentialSubject: {
         id: "did:ethr:ganache",
-        you: "Raspberry Pi 2",
+        model: "Raspberry Pi 2",
+        VIM: "@#!#$@#@",
+        localtion: {
+          latitude: 123.123,
+          longitude: 123.123,
+        },
       },
+      issuanceDate: new Date().toISOString(),
+
       type: ["VerifiableCredential", "IOTDeviceCredential"],
       save: true,
     },
