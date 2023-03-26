@@ -28,11 +28,21 @@ import { EthereumDIDRegistry } from "ethr-did-resolver";
 import { W3cMessageHandler } from "@veramo/credential-w3c";
 import { JwtMessageHandler } from "@veramo/did-jwt";
 import { MessageHandler } from "@veramo/message-handler";
+import { contexts as credential_contexts } from "@transmute/credentials-context";
+
 import {
   SdrMessageHandler,
   ISelectiveDisclosure,
   SelectiveDisclosure,
 } from "@veramo/selective-disclosure";
+
+import {
+  CredentialIssuerLD,
+  ICredentialIssuerLD,
+  LdDefaultContexts,
+  VeramoEcdsaSecp256k1RecoverySignature2020,
+  VeramoEd25519Signature2018,
+} from "@veramo/credential-ld";
 
 import Web3 from "web3";
 
@@ -111,7 +121,8 @@ export const agent = createAgent<
     ICredentialIssuerEIP712 &
     IMessageHandler &
     ISelectiveDisclosure &
-    IDIDComm
+    IDIDComm &
+    ICredentialIssuerLD
 >({
   plugins: [
     new KeyManager({
@@ -163,6 +174,13 @@ export const agent = createAgent<
     new CredentialIssuerEIP712(),
     new SelectiveDisclosure(),
     new DIDComm([new DIDCommHttpTransport()]),
+    new CredentialIssuerLD({
+      contextMaps: [LdDefaultContexts, credential_contexts as any],
+      suites: [
+        new VeramoEcdsaSecp256k1RecoverySignature2020(),
+        new VeramoEd25519Signature2018(),
+      ],
+    }),
     new MessageHandler({
       messageHandlers: [
         new W3cMessageHandler(),

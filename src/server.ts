@@ -53,17 +53,22 @@ app.get("/EVSP/:hash", async (req: Request, res: Response) => {
 });
 
 // Verify VC
-// app.post("/verify", async (req: Request, res: Response) => {
-//   try {
-//     const credential = req.body as VerifiableCredential;
-//     const result = await agent.verifyCredential({
-//       verifiableCredential: credential,
-//     });
-//     res.json({ verified: result.verified });
-//   } catch (err) {
-//     res.status(500).send("Verification failed: " + err.message);
-//   }
-// });
+app.get("/verify/:hash", async (req: Request, res: Response) => {
+  try {
+    const hash = req.params.hash;
+    const verifiableCredential = await agent.dataStoreGetVerifiableCredential({
+      hash,
+    });
+    const result = await agent.verifyCredential({
+      credential: {
+        ...verifiableCredential,
+      },
+    });
+    res.json({ verified: result.verified });
+  } catch (err) {
+    res.status(500).send("Verification failed: " + err);
+  }
+});
 
 app.get("/send-message", async (req: Request, res: Response) => {
   // const fromAlias = req.body.fromAlias;
