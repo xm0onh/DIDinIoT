@@ -77,11 +77,6 @@ dotenv.config();
 // This will be the name for the local sqlite database for demo purposes
 const DATABASE_FILE = "database.sqlite";
 
-// You will need to get a project ID from infura https://www.infura.io
-// const INFURA_PROJECT_ID = "20e23d9d432e41d1b01e5fbe33c8c43a";
-
-// This will be the secret key for the KMS
-
 const registryAddress = process.env.REGISTRY_ADDRESS;
 
 let provider, registry;
@@ -95,8 +90,6 @@ if (!registryAddress) {
   );
   registry = registryAddress;
 }
-
-// const ethersProvider = createEthersProvider();
 
 const dbConnection = new DataSource({
   type: "sqlite",
