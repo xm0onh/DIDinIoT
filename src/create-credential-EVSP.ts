@@ -21,8 +21,8 @@ async function main() {
         licensePlate: "EVSP001",
         availability: true,
         location: {
-          latitude: "37.7749",
-          longitude: "-122.4194",
+          latitude: "lat",
+          longitude: "long",
         },
       },
       issuanceDate: new Date().toISOString(),
