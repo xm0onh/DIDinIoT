@@ -4084,6 +4084,11 @@ p-map@^4.0.0:
   dependencies:
     aggregate-error "^3.0.0"
 
+pako@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
+
 parse-headers@^2.0.0:
   version "2.0.5"
   resolved "https://registry.npmjs.org/parse-headers/-/parse-headers-2.0.5.tgz"
@@ -5452,3 +5457,10 @@ z-schema@^5.0.5:
     validator "^13.7.0"
   optionalDependencies:
     commander "^9.4.1"
+
+zokrates-js@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/zokrates-js/-/zokrates-js-1.1.5.tgz#a042c44f280f984d89437079d509605279b8e2a7"
+  integrity sha512-uuyoU0z3p+HDxb4WJ6u3xifDkODO1+820NZB+vPyop9gVsknt35vDnc87R732d6ovp9u/5rYCFVqlxUlz7BRuw==
+  dependencies:
+    pako "^2.1.0"

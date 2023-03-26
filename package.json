@@ -30,6 +30,7 @@
     "ganache": "^7.7.6",
     "sqlite3": "^5.1.4",
     "web-did-resolver": "^2.0.21",
-    "web3": "^1.8.2"
+    "web3": "^1.8.2",
+    "zokrates-js": "^1.1.5"
   }
 }
