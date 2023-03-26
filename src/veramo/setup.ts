@@ -7,7 +7,15 @@ import {
   IDataStoreORM,
   IKeyManager,
   ICredentialPlugin,
+  IMessageHandler,
 } from "@veramo/core";
+
+import {
+  DIDComm,
+  DIDCommHttpTransport,
+  DIDCommMessageHandler,
+  IDIDComm,
+} from "@veramo/did-comm";
 
 import {
   CredentialIssuerEIP712,
@@ -17,6 +25,15 @@ import {
 import { Web3Provider } from "@ethersproject/providers";
 import { Contract, ContractFactory } from "@ethersproject/contracts";
 import { EthereumDIDRegistry } from "ethr-did-resolver";
+import { W3cMessageHandler } from "@veramo/credential-w3c";
+import { JwtMessageHandler } from "@veramo/did-jwt";
+import { MessageHandler } from "@veramo/message-handler";
+import {
+  SdrMessageHandler,
+  ISelectiveDisclosure,
+  SelectiveDisclosure,
+} from "@veramo/selective-disclosure";
+
 import Web3 from "web3";
 
 // Core identity manager plugin
@@ -64,8 +81,7 @@ const DATABASE_FILE = "database.sqlite";
 // const INFURA_PROJECT_ID = "20e23d9d432e41d1b01e5fbe33c8c43a";
 
 // This will be the secret key for the KMS
-const KMS_SECRET_KEY =
-  "6a8e08d87c65354d21116708823aa620e266b860b1b01a0733b7a01a2fab1bcf";
+const KMS_SECRET_KEY = process.env.KMS_SECRET_KEY;
 
 const registryAddress = process.env.REGISTRY_ADDRESS;
 
@@ -100,7 +116,10 @@ export const agent = createAgent<
     IDataStoreORM &
     IResolver &
     ICredentialPlugin &
-    ICredentialIssuerEIP712
+    ICredentialIssuerEIP712 &
+    IMessageHandler &
+    ISelectiveDisclosure &
+    IDIDComm
 >({
   plugins: [
     new KeyManager({
@@ -147,6 +166,16 @@ export const agent = createAgent<
     new DataStore(dbConnection),
     new DataStoreORM(dbConnection),
     new CredentialIssuerEIP712(),
+    new SelectiveDisclosure(),
+    new DIDComm([new DIDCommHttpTransport()]),
+    new MessageHandler({
+      messageHandlers: [
+        new W3cMessageHandler(),
+        new SdrMessageHandler(),
+        new DIDCommMessageHandler(),
+        new JwtMessageHandler(),
+      ],
+    }),
   ],
 });
 

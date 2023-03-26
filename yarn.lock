@@ -1241,6 +1241,23 @@
     typeorm "^0.3.10"
     uuid "^9.0.0"
 
+"@veramo/did-comm@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@veramo/did-comm/-/did-comm-5.1.2.tgz#30261f7d3f2570529829c61877f6b7259a77d30e"
+  integrity sha512-VNIVgTz+U1/YUfnGwlwfl4CAbU5nBU7uKu4UF8Y6FmavzHdRwVBB9jblBchoqtRwLY5r8ukpwFWD2HylzS03vA==
+  dependencies:
+    "@ethersproject/signing-key" "^5.7.0"
+    "@stablelib/ed25519" "^1.0.3"
+    "@veramo/core-types" "^5.1.2"
+    "@veramo/message-handler" "^5.1.2"
+    "@veramo/utils" "^5.1.2"
+    cross-fetch "^3.1.4"
+    debug "^4.3.3"
+    did-jwt "^6.9.0"
+    did-resolver "^4.0.1"
+    uint8arrays "^3.0.0"
+    uuid "^9.0.0"
+
 "@veramo/did-discovery@^5.1.2":
   version "5.1.2"
   resolved "https://registry.npmjs.org/@veramo/did-discovery/-/did-discovery-5.1.2.tgz"
@@ -1248,6 +1265,17 @@
   dependencies:
     "@veramo/core-types" "^5.1.2"
     debug "^4.3.3"
+
+"@veramo/did-jwt@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@veramo/did-jwt/-/did-jwt-5.1.2.tgz#b937fc08f4703f234a46a1ae0ec34f611f5ee68c"
+  integrity sha512-6zk4O/bENz2q1SsDJI8/ItL7zFfkBxAhSFOSiTFyOUn1w6XG7TdDQqSdWnvVEvIE2AV0vDmg/npaF1kBvHg7wQ==
+  dependencies:
+    "@veramo/core-types" "^5.1.2"
+    "@veramo/message-handler" "^5.1.2"
+    debug "^4.3.3"
+    did-jwt "^6.9.0"
+    did-resolver "^4.0.1"
 
 "@veramo/did-manager@^5.1.2":
   version "5.1.2"
@@ -1357,6 +1385,18 @@
     passport "^0.6.0"
     passport-http-bearer "^1.0.1"
     url-parse "^1.5.4"
+
+"@veramo/selective-disclosure@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@veramo/selective-disclosure/-/selective-disclosure-5.1.2.tgz#f7fcd3e442e95571fd9a6af7a2527b05cd65eac4"
+  integrity sha512-XD4JvS0PtU6pFLA2ulbSHiT/VtJfkiJEyyDoKGIL6sxMorocfzMI9eg9wRpI8k3SHKiA+VrP5UeNKsNnlodHiQ==
+  dependencies:
+    "@veramo/core-types" "^5.1.2"
+    "@veramo/message-handler" "^5.1.2"
+    "@veramo/utils" "^5.1.2"
+    debug "^4.3.3"
+    did-jwt "^6.9.0"
+    uuid "^9.0.0"
 
 "@veramo/utils@^5.1.2":
   version "5.1.2"

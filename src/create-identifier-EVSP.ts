@@ -3,10 +3,10 @@ import { agent } from "./veramo/setup.js";
 async function main() {
   const identifier = await agent
     .didManagerCreate({
-      alias: "EV",
+      alias: "EVSP",
       provider: "did:ethr:ganache",
       options: {
-        sign: false,
+        sign: true,
       },
       kms: "local",
     })
