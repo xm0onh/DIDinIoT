@@ -81,7 +81,6 @@ const DATABASE_FILE = "database.sqlite";
 // const INFURA_PROJECT_ID = "20e23d9d432e41d1b01e5fbe33c8c43a";
 
 // This will be the secret key for the KMS
-const KMS_SECRET_KEY = process.env.KMS_SECRET_KEY;
 
 const registryAddress = process.env.REGISTRY_ADDRESS;
 
@@ -126,7 +125,10 @@ export const agent = createAgent<
       store: new KeyStore(dbConnection),
       kms: {
         local: new KeyManagementSystem(
-          new PrivateKeyStore(dbConnection, new SecretBox(KMS_SECRET_KEY))
+          new PrivateKeyStore(
+            dbConnection,
+            new SecretBox(process.env.KMS_SECRET_KEY ?? "none")
+          )
         ),
       },
     }),
