@@ -27,6 +27,8 @@ async function main() {
   console.log("Contract is deploying...");
   const contract = await contractFactory.deploy();
 
+  console.log(contract.address);
+
   const __filename = fileURLToPath(import.meta.url);
   const parentFolder = path.dirname(__filename);
   let rawdata = await fs.readFileSync(parentFolder + "/proofs/proof.json");
