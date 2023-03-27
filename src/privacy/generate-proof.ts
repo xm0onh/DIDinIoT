@@ -27,15 +27,15 @@ async function main() {
   const zokratesProvider = await initialize();
 
   const __filename = fileURLToPath(import.meta.url);
-
   const parentFolder = path.dirname(__filename);
-
   const rawdata = fs.readFileSync(parentFolder + "/zk.zok");
-
   const source = rawdata.toString();
 
   // compilation
   const artifacts = zokratesProvider.compile(source);
+
+  // The number of Constraints
+  console.log("Constraint Count ->>>>", artifacts.constraintCount);
 
   // computation
   const { witness, output } = zokratesProvider.computeWitness(artifacts, [
@@ -53,6 +53,7 @@ async function main() {
     witness,
     keypair.pk
   );
+
   await fse.outputFile(
     parentFolder + "/proofs/proof.json",
     JSON.stringify(proof)
