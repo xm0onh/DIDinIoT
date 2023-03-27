@@ -21,6 +21,7 @@ import {
   CredentialIssuerEIP712,
   ICredentialIssuerEIP712,
 } from "@veramo/credential-eip712";
+import "reflect-metadata";
 
 import { Web3Provider } from "@ethersproject/providers";
 import { Contract, ContractFactory } from "@ethersproject/contracts";
@@ -65,7 +66,7 @@ import { CredentialPlugin } from "@veramo/credential-w3c";
 import { DIDResolverPlugin } from "@veramo/did-resolver";
 import { Resolver } from "did-resolver";
 import { getResolver as ethrDidResolver } from "ethr-did-resolver";
-
+import { Privacy } from "./privateDatabase/privacypreserving.js";
 // Storage plugin using TypeOrm
 import {
   Entities,
@@ -100,15 +101,14 @@ if (!registryAddress) {
   );
   registry = registryAddress;
 }
-
 const dbConnection = new DataSource({
   type: "sqlite",
   database: DATABASE_FILE,
-  synchronize: false,
+  synchronize: true,
   migrations,
   migrationsRun: true,
   logging: ["error", "info", "warn"],
-  entities: Entities,
+  entities: [...Entities, Privacy],
 }).initialize();
 
 export const agent = createAgent<
