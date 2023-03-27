@@ -7,8 +7,10 @@ The include and exclude settings specify which files should be included and excl
 
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "preserveConstEnums": true,
-    "strict": true,
+    "strict": false,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -19,7 +21,8 @@ The include and exclude settings specify which files should be included and excl
     "rootDir": "src",
     "paths": {
       "*": ["src/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
