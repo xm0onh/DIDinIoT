@@ -27,20 +27,6 @@ const evs = [
   },
 ];
 
-// let priority = {
-//   distance: 10,
-//   batteryCapacity: 1,
-//   chargingSpeed: 1,
-//   price: 1,
-//   waitingTime: 1,
-// };
-
-let price1 = {
-  ev: 0.5,
-};
-let time1 = {
-  ev: 20,
-};
 async function finder(EV, priority, price, time) {
   setPriority(priority);
   SetEVPriceTime(price, time);
@@ -59,7 +45,5 @@ async function finder(EV, priority, price, time) {
   //   console.log("HH", findBestMatchingEVSP(graph, EV[0].name));
   return findBestMatchingEVSP(graph, EV[0].name);
 }
-
-// finder(evs, priority, price1.ev, time1.ev);
 
 export { finder };
