@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 import sqlite3 from "sqlite3";
 import { agent } from "../veramo/setup.js";
 
-const db = new sqlite3.Database("database1.sqlite", (err) => {
+const db = new sqlite3.Database("database.sqlite", (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -64,4 +64,28 @@ async function updateZKP(
   }
 }
 
-export { InsertZKSData, updateZKP };
+async function getAllEVSPVCs(EVSP_DID) {
+  try {
+    const row = await new Promise<any>((resolve, reject) => {
+      db.all(
+        "SELECT raw FROM credential WHERE issuerDid = ?",
+        [
+          "did:ethr:ganache:0x032e8e361b0cf4d6aeb2ce45e5f244521aa61e1c98b4b47578b7105d5832392845",
+        ],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(row);
+        }
+      );
+    });
+
+    if (row) {
+      return JSON.parse(JSON.stringify(row));
+    }
+  } catch (error) {
+    console.error("Error inserting data:", error);
+  }
+}
+export { InsertZKSData, updateZKP, getAllEVSPVCs };

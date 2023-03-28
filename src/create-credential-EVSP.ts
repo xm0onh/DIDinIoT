@@ -20,7 +20,7 @@ async function main() {
         price: 0.5,
         availability: true,
         location: {
-          latitude: 32.1231,
+          latitude: 31.1231,
           longitude: -122.1231,
         },
       },

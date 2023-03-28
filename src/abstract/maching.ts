@@ -203,4 +203,6 @@ export {
   generateWeightedGraph,
   EVPriceTime,
   EVSPPriceTime,
+  evs,
+  priority,
 };
