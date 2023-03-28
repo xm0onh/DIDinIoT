@@ -61,7 +61,7 @@ import { KeyManagementSystem, SecretBox } from "@veramo/kms-local";
 
 // W3C Verifiable Credential plugin
 import { CredentialPlugin } from "@veramo/credential-w3c";
-
+import { PrivacyPreserving1447159020002 } from "./privateDatabase/PrivacyMigrations.js";
 // Custom resolvers
 import { DIDResolverPlugin } from "@veramo/did-resolver";
 import { Resolver } from "did-resolver";
@@ -104,8 +104,8 @@ if (!registryAddress) {
 const dbConnection = new DataSource({
   type: "sqlite",
   database: DATABASE_FILE,
-  synchronize: true,
-  migrations,
+  synchronize: false,
+  migrations: [...migrations, PrivacyPreserving1447159020002],
   migrationsRun: true,
   logging: ["error", "info", "warn"],
   entities: [...Entities, Privacy],
