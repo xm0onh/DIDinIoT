@@ -1,15 +1,15 @@
 import express, { Request, Response } from "express";
 import sqlite3 from "sqlite3";
 import { agent } from "./veramo/setup.js";
-
+import { InsertZKSData, updateZKP } from "./abstract/abstract.js";
 const app = express();
 const port = 8085;
 
-const db = new sqlite3.Database("database.sqlite", (err) => {
+const db = new sqlite3.Database("database1.sqlite", (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log("Connected to the database.");
+  console.log("Connected to the database. server");
 });
 
 app.use(express.json());
@@ -147,6 +147,29 @@ app.get("/send-sdr", async (req: Request, res: Response) => {
     res.status(500).send("Failed to send message: " + err);
   }
 });
+
+app.get("/zkp/:from/:to/:claim", async (req: Request, res: Response) => {
+  const from = req.params.from;
+  const to = req.params.to;
+  const claim = req.params.claim;
+  InsertZKSData(from, to, claim, "", "", "");
+  res.json("done");
+});
+
+app.get(
+  "/uzkp/:claim/:from/:to/:input/:proof/:contract",
+  async (req: Request, res: Response) => {
+    const from = req.params.from;
+    const to = req.params.to;
+    const claim = req.params.claim;
+    const input = req.params.input;
+    const proof = req.params.proof;
+    const contract = req.params.contract;
+    updateZKP(claim, from, to, input, proof, contract);
+    res.json("done");
+  }
+);
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
