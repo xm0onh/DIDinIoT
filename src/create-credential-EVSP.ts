@@ -6,23 +6,22 @@ async function main() {
     credential: {
       "@context": ["https://www.w3.org/2018/credentials/v1"],
       issuer: { id: EVSP_IDEN.did },
-      id: "urn:uuid:9322e2b1-5451-4488-9896-9e6d59d6e960",
       type: ["VerifiableCredential", "EVSPOfflineCredential"],
       save: true,
       credentialSubject: {
+        id: "urn:uuid:9322e2b1-5451-4488-9896-9e6d59d6e960",
         type: "EVSPOfflineIdentity",
         make: "Station 1",
         model: "Model 1",
         year: "2022",
-        battery: "100 kWh",
-        range: "402 miles",
-        color: "blue",
-        vin: "5YJSA1E48HF189279",
-        licensePlate: "EVSP001",
+        batteryCapacity: 100, // kWh
+        chargingSpeed: 100, // X miles per hour
+        range: 402, // miles
+        price: 0.5,
         availability: true,
         location: {
-          latitude: "lat",
-          longitude: "long",
+          latitude: 32.1231,
+          longitude: -122.1231,
         },
       },
       issuanceDate: new Date().toISOString(),

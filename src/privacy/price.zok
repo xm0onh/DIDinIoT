@@ -1,0 +1,4 @@
+def main(private field price, field desire){
+    assert(price < desire);
+    return;
+}

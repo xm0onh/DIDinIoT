@@ -1,6 +1,6 @@
 import { agent } from "./veramo/setup.js";
 
-async function main() {
+async function createNewEVCredential() {
   const EV_IDEN = await agent.didManagerGetByAlias({ alias: "EV" });
   const EV_VC = await agent.createVerifiableCredential({
     credential: {
@@ -10,17 +10,21 @@ async function main() {
       save: true,
       credentialSubject: {
         id: "did:example:456",
+        owner: true,
         type: "ElectricVehicle",
-        make: "Tesla",
+        brand: "Tesla",
+        range: "402 miles",
+        color: "blue",
         model: "Model S",
         year: "2022",
         VIN: "5YJSA1E11MF413982",
-        batteryCapacity: "75 kWh",
-        chargingRate: "150 kW",
-        currentCharge: "70%",
+        batteryCapacity: 75, //kWh
+        chargingRate: 150, //kW
+        currentCharge: 70, // percent
+        chargingSpeed: 100, // X miles per hour
         location: {
-          latitude: "37.7749",
-          longitude: "-122.4194",
+          latitude: 37.7749,
+          longitude: -122.4194,
         },
       },
       issuanceDate: new Date().toISOString(),
@@ -33,4 +37,4 @@ async function main() {
   });
 }
 
-main().catch(console.log);
+export { createNewEVCredential };

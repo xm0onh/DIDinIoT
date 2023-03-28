@@ -66,7 +66,7 @@ import { CredentialPlugin } from "@veramo/credential-w3c";
 import { DIDResolverPlugin } from "@veramo/did-resolver";
 import { Resolver } from "did-resolver";
 import { getResolver as ethrDidResolver } from "ethr-did-resolver";
-import { Privacy } from "./privateDatabase/privacypreserving.js";
+import { Privacy } from "./privateDatabase/PPDatabaseType.js";
 // Storage plugin using TypeOrm
 import {
   Entities,
