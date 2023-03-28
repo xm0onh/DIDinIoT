@@ -28,7 +28,7 @@ async function main() {
 
   const __filename = fileURLToPath(import.meta.url);
   const parentFolder = path.dirname(__filename);
-  const rawdata = fs.readFileSync(parentFolder + "/zk.zok");
+  const rawdata = fs.readFileSync(parentFolder + "/price.zok");
   const source = rawdata.toString();
 
   // compilation
