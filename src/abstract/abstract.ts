@@ -28,10 +28,8 @@ async function InsertZKSData(claim, sender, receiver, proof, input, contract) {
         }
       );
     });
-
-    console.log("Data inserted successfully");
   } catch (error) {
-    console.error("Error inserting data:", error);
+    console.error("Error:", error);
   }
 }
 
@@ -69,9 +67,7 @@ async function getAllEVSPVCs(EVSP_DID) {
     const row = await new Promise<any>((resolve, reject) => {
       db.all(
         "SELECT raw FROM credential WHERE issuerDid = ?",
-        [
-          "did:ethr:ganache:0x032e8e361b0cf4d6aeb2ce45e5f244521aa61e1c98b4b47578b7105d5832392845",
-        ],
+        [[EVSP_DID]],
         (err, row) => {
           if (err) {
             reject(err);
@@ -85,7 +81,7 @@ async function getAllEVSPVCs(EVSP_DID) {
       return JSON.parse(JSON.stringify(row));
     }
   } catch (error) {
-    console.error("Error inserting data:", error);
+    console.error("Error:", error);
   }
 }
 export { InsertZKSData, updateZKP, getAllEVSPVCs };

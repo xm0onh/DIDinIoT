@@ -1,0 +1,4 @@
+def main(private bool owner){
+    assert(owner == true);
+    return
+}

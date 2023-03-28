@@ -23,7 +23,7 @@ function runCommand(command: string) {
   });
 }
 
-async function main() {
+async function GenerateProof(price) {
   const zokratesProvider = await initialize();
 
   const __filename = fileURLToPath(import.meta.url);
@@ -39,8 +39,7 @@ async function main() {
 
   // computation
   const { witness, output } = zokratesProvider.computeWitness(artifacts, [
-    "16",
-    "5",
+    price,
   ]);
 
   // run setup
@@ -74,4 +73,4 @@ async function main() {
   }
 }
 
-main();
+export { GenerateProof };

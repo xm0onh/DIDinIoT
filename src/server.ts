@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import sqlite3 from "sqlite3";
 import { agent } from "./veramo/setup.js";
 import { InsertZKSData, updateZKP } from "./abstract/abstract.js";
+import { finder as EVSPFinder } from "./EVSP_Finder/EVSPFinder.js";
 const app = express();
 const port = 8085;
 
-const db = new sqlite3.Database("database1.sqlite", (err) => {
+const db = new sqlite3.Database("database.sqlite", (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -169,6 +170,39 @@ app.get(
     res.json("done");
   }
 );
+
+app.get("/FindEVSP/:hash", async (req: Request, res: Response) => {
+  try {
+    const hash = req.params.hash;
+    let verifiableCredential = await agent.dataStoreGetVerifiableCredential({
+      hash: hash,
+    });
+    verifiableCredential = JSON.parse(JSON.stringify(verifiableCredential));
+    let priority = {
+      distance: 1,
+      batteryCapacity: 1,
+      chargingSpeed: 1,
+      price: 10,
+      waitingTime: 1,
+    };
+
+    let price = {
+      ev: 8.5,
+    };
+    let time = {
+      ev: 50,
+    };
+    const bestEVSP = await EVSPFinder(
+      Array(verifiableCredential.credentialSubject),
+      priority,
+      price,
+      time
+    );
+    res.json(bestEVSP);
+  } catch (err) {
+    res.status(500).send("Failed: " + err);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

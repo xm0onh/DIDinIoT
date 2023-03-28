@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
 
-async function main() {
+async function DeployVerifierContract() {
   const provider = new ethers.providers.JsonRpcProvider(
     "http://10.0.0.98:8545"
   );
@@ -41,9 +41,11 @@ async function main() {
   console.log(test);
 }
 
-main()
+DeployVerifierContract()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
     process.exit(1);
   });
+
+export { DeployVerifierContract };

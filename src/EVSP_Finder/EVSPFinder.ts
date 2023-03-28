@@ -1,13 +1,49 @@
 import { agent } from "../veramo/setup.js";
 import { getAllEVSPVCs } from "../abstract/abstract.js";
 import {
-  evs,
   generateWeightedGraph,
-  priority,
+  setPriority,
   findBestMatchingEVSP,
+  SetEVPriceTime,
 } from "../abstract/maching.js";
 
-async function finder() {
+// Sample data:
+const evs = [
+  {
+    name: "Vehicle 1",
+    owner: true,
+    type: "ElectricVehicle",
+    brand: "Tesla",
+    range: "402 miles",
+    color: "blue",
+    model: "Model S",
+    year: "2022",
+    VIN: "5YJSA1E11MF413982",
+    batteryCapacity: 75,
+    chargingRate: 150,
+    currentCharge: 70,
+    chargingSpeed: 100,
+    location: { latitude: 37.7749, longitude: -122.4194 },
+  },
+];
+
+// let priority = {
+//   distance: 10,
+//   batteryCapacity: 1,
+//   chargingSpeed: 1,
+//   price: 1,
+//   waitingTime: 1,
+// };
+
+let price1 = {
+  ev: 0.5,
+};
+let time1 = {
+  ev: 20,
+};
+async function finder(EV, priority, price, time) {
+  setPriority(priority);
+  SetEVPriceTime(price, time);
   const EVSP_DID = await agent.didManagerGetByAlias({ alias: "EVSP" });
   const VCs = await getAllEVSPVCs(EVSP_DID.did);
   let temp = [];
@@ -19,11 +55,11 @@ async function finder() {
     temp[i] = temp[i].credentialSubject;
   }
 
-  const graph = generateWeightedGraph(evs, temp, priority);
-
-  console.log(findBestMatchingEVSP(graph, "ev1"));
+  const graph = generateWeightedGraph(EV, temp, priority);
+  //   console.log("HH", findBestMatchingEVSP(graph, EV[0].name));
+  return findBestMatchingEVSP(graph, EV[0].name);
 }
 
-finder();
+// finder(evs, priority, price1.ev, time1.ev);
 
 export { finder };

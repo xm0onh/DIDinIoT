@@ -53,7 +53,7 @@ let priority = {
 
 let price = {
   ev: 0.5,
-  evsp: 0.5,
+  evsp: 1.5,
 };
 
 let waitingTime = {
@@ -100,8 +100,8 @@ function generateWeightedGraph(evs, evsps, priority) {
   const graph = new WeightedGraph();
 
   // Add vertices to the graph
-  evs.forEach((ev) => graph.addVertex(ev.id));
-  evsps.forEach((evsp) => graph.addVertex(evsp.id));
+  evs.forEach((ev) => graph.addVertex(ev.name));
+  evsps.forEach((evsp) => graph.addVertex(evsp.name));
 
   // Add edges with calculated weights
   evs.forEach((ev) => {
@@ -116,7 +116,7 @@ function generateWeightedGraph(evs, evsps, priority) {
         priority.price * Math.abs(price.ev - price.evsp) +
         priority.waitingTime * Math.abs(waitingTime.ev - waitingTime.evsp);
 
-      graph.addEdge(ev.id, evsp.id, weight);
+      graph.addEdge(ev.name, evsp.name, weight);
     });
   });
 
@@ -141,18 +141,6 @@ function findBestMatchingEVSP(graph, evId) {
 }
 
 // Example usage
-const evs = [
-  {
-    id: "ev1",
-    // ... other attributes
-    location: { latitude: 40.7128, longitude: -74.006 },
-    batteryCapacity: 60,
-    chargingSpeed: 100,
-    price: 30000,
-    waitingTime: 5,
-  },
-  // ... other EVs
-];
 
 const evsps = [
   {
@@ -166,26 +154,20 @@ const evsps = [
   },
 ];
 
-function setPriority(
-  distance,
-  batteryCapacity,
-  chargingSpeed,
-  price,
-  waitingTime
-) {
-  priority.distance = distance;
-  priority.batteryCapacity = batteryCapacity;
-  priority.chargingSpeed = chargingSpeed;
-  priority.price = price;
-  priority.waitingTime = waitingTime;
+function setPriority(newPriority) {
+  priority.distance = newPriority.distance;
+  priority.batteryCapacity = newPriority.batteryCapacity;
+  priority.chargingSpeed = newPriority.chargingSpeed;
+  priority.price = newPriority.price;
+  priority.waitingTime = newPriority.waitingTime;
 }
 
-function EVPriceTime(price, time) {
-  price.ev = price;
-  waitingTime.ev = time;
+function SetEVPriceTime(NewPrice, NewTime) {
+  price.ev = NewPrice.ev;
+  waitingTime.ev = NewTime.ev;
 }
 
-function EVSPPriceTime(price, time) {
+function SetEVSPPriceTime(price, time) {
   price.evsp = price;
   waitingTime.evsp = time;
 }
@@ -201,8 +183,7 @@ export {
   findBestMatchingEVSP,
   setPriority,
   generateWeightedGraph,
-  EVPriceTime,
-  EVSPPriceTime,
-  evs,
+  SetEVPriceTime,
+  SetEVSPPriceTime,
   priority,
 };

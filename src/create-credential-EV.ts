@@ -1,6 +1,6 @@
 import { agent } from "./veramo/setup.js";
 
-async function createNewEVCredential() {
+async function main() {
   const EV_IDEN = await agent.didManagerGetByAlias({ alias: "EV" });
   const EV_VC = await agent.createVerifiableCredential({
     credential: {
@@ -9,7 +9,7 @@ async function createNewEVCredential() {
       type: ["VerifiableCredential", "EVCredential"],
       save: true,
       credentialSubject: {
-        id: "did:example:456",
+        name: "Vehicle 1",
         owner: true,
         type: "ElectricVehicle",
         brand: "Tesla",
@@ -37,4 +37,4 @@ async function createNewEVCredential() {
   });
 }
 
-export { createNewEVCredential };
+main().catch(console.log);
