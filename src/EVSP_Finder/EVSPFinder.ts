@@ -22,6 +22,7 @@ async function finder(EV, priority, price, time) {
   }
 
   const graph = generateWeightedGraph(EV, temp, priority);
+  //   console.log(JSON.parse(JSON.stringify(graph)).adjacencyList);
   return findBestMatchingEVSP(graph, EV[0].name);
 }
 

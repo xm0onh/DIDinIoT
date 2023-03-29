@@ -9,7 +9,7 @@ async function main() {
       type: ["VerifiableCredential", "EVSPOfflineCredential"],
       save: true,
       credentialSubject: {
-        name: "EVSP 3",
+        name: "EVSP Tajrish",
         type: "EVSPOfflineIdentity",
         make: "Station 1",
         model: "Model 1",
@@ -20,8 +20,8 @@ async function main() {
         price: 0.5,
         availability: true,
         location: {
-          latitude: 25.1231,
-          longitude: -112.1231,
+          latitude: 35.806977,
+          longitude: 51.428818,
         },
       },
       issuanceDate: new Date().toISOString(),

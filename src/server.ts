@@ -179,10 +179,10 @@ app.get("/FindEVSP/:hash", async (req: Request, res: Response) => {
     });
     verifiableCredential = JSON.parse(JSON.stringify(verifiableCredential));
     let priority = {
-      distance: 1,
+      distance: 5,
       batteryCapacity: 1,
       chargingSpeed: 1,
-      price: 10,
+      price: 1,
       waitingTime: 1,
     };
 

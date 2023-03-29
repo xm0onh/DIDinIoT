@@ -10,39 +10,6 @@ Way:
     The EV will verify the proof.
 
 */
-
-interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-interface EVSP {
-  id: string;
-  name: string;
-  location: Location;
-  batteryCapacity: number;
-  chargingSpeed: number;
-  price: number;
-  waitingTime: number;
-}
-
-interface EV {
-  id: string;
-  type: string;
-  make: string;
-  model: string;
-  year: string;
-  battery: string;
-  range: string;
-  color: string;
-  vin: string;
-  licensePlate: string;
-  location: Location;
-  batteryCapacity: number;
-  chargingSpeed: number;
-  price: number;
-  waitingTime: number;
-}
 let priority = {
   distance: 1,
   batteryCapacity: 1,
@@ -60,6 +27,7 @@ let waitingTime = {
   ev: 30,
   evsp: 30,
 };
+
 class WeightedGraph {
   adjacencyList: {};
   constructor() {
@@ -76,6 +44,29 @@ class WeightedGraph {
     this.adjacencyList[vertex1].push({ node: vertex2, weight });
     this.adjacencyList[vertex2].push({ node: vertex1, weight });
   }
+}
+
+function zScoreNormalization(
+  x1: number,
+  x2: number,
+  x3: number,
+  x4: number,
+  x5: number
+): number[] {
+  // Convert inputs to a TypeScript array for easy calculations
+  const x: number[] = [x1, x2, x3, x4, x5];
+
+  // Calculate the mean and standard deviation of the inputs
+  const mean = x.reduce((acc, curr) => acc + curr, 0) / x.length;
+  const stdDev = Math.sqrt(
+    x.map((num) => (num - mean) ** 2).reduce((acc, curr) => acc + curr, 0) /
+      x.length
+  );
+
+  // Calculate the z-score normalized values for each input
+  const zScoreNormalized = x.map((num) => (num - mean) / stdDev);
+
+  return zScoreNormalized;
 }
 
 function calculateDistance(location1, location2) {
@@ -106,6 +97,7 @@ function generateWeightedGraph(evs, evsps, priority) {
   // Add edges with calculated weights
   evs.forEach((ev) => {
     evsps.forEach((evsp) => {
+      let temp = [];
       const distance = calculateDistance(ev.location, evsp.location);
       const weight =
         priority.distance * distance +
@@ -123,7 +115,38 @@ function generateWeightedGraph(evs, evsps, priority) {
   return graph;
 }
 
-// const graph = generateWeightedGraph(evs, evsps, priority);
+function generateNormalizedWeightedGraph(evs, evsps, priority) {
+  const graph = new WeightedGraph();
+
+  // Add vertices to the graph
+  evs.forEach((ev) => graph.addVertex(ev.name));
+  evsps.forEach((evsp) => graph.addVertex(evsp.name));
+
+  // Add edges with calculated weights
+  let Values = [];
+  evs.forEach((ev) => {
+    evsps.forEach((evsp) => {
+      let temp = [];
+      const distance = calculateDistance(ev.location, evsp.location);
+      temp.push(distance);
+      temp.push(Math.abs(ev.batteryCapacity - evsp.batteryCapacity));
+      temp.push(Math.abs(ev.chargingSpeed - evsp.chargingSpeed));
+      temp.push(Math.abs(price.ev - price.evsp));
+      temp.push(Math.abs(waitingTime.ev - waitingTime.evsp));
+      temp = zScoreNormalization(temp[0], temp[1], temp[2], temp[3], temp[4]);
+      const weight =
+        temp[0] * priority.distance +
+        temp[1] * priority.batteryCapacity +
+        temp[2] * priority.chargingSpeed +
+        temp[3] * priority.price +
+        temp[4] * priority.waitingTime;
+
+      graph.addEdge(ev.name, evsp.name, weight);
+    });
+  });
+
+  return graph;
+}
 
 function findBestMatchingEVSP(graph, evId) {
   const connectedEVSPs = graph.adjacencyList[evId];
@@ -139,20 +162,6 @@ function findBestMatchingEVSP(graph, evId) {
     }
   });
 }
-
-// Example usage
-
-const evsps = [
-  {
-    id: "evsp1",
-    // ... other attributes
-    location: { latitude: 40.7306, longitude: -73.9352 },
-    batteryCapacity: 50,
-    chargingSpeed: 120,
-    price: 25000,
-    waitingTime: 10,
-  },
-];
 
 function setPriority(newPriority) {
   priority.distance = newPriority.distance;
@@ -171,13 +180,6 @@ function SetEVSPPriceTime(price, time) {
   price.evsp = price;
   waitingTime.evsp = time;
 }
-
-// const bestEVSPForEV1 = findBestMatchingEVSP(graph, "ev1");
-
-// console.log(graph.adjacencyList);
-// console.log(
-//   `The best EVSP for EV1 is ${bestEVSPForEV1.node} with a weight of ${bestEVSPForEV1.weight}`
-// );
 
 export {
   findBestMatchingEVSP,

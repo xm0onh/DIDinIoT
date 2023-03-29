@@ -9,7 +9,7 @@ async function main() {
       type: ["VerifiableCredential", "EVCredential"],
       save: true,
       credentialSubject: {
-        name: "Vehicle 1",
+        name: "Vehicle 1 CIBC",
         owner: true,
         type: "ElectricVehicle",
         brand: "Tesla",
@@ -23,8 +23,8 @@ async function main() {
         currentCharge: 70, // percent
         chargingSpeed: 100, // X miles per hour
         location: {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          latitude: 49.886544,
+          longitude: -119.496269,
         },
       },
       issuanceDate: new Date().toISOString(),
