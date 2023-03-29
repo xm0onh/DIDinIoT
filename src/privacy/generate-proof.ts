@@ -38,9 +38,7 @@ async function GenerateProof(price) {
   console.log("Constraint Count ->>>>", artifacts.constraintCount);
 
   // computation
-  const { witness, output } = zokratesProvider.computeWitness(artifacts, [
-    price,
-  ]);
+  const { witness, output } = zokratesProvider.computeWitness(artifacts, price);
 
   // run setup
   const keypair = zokratesProvider.setup(artifacts.program);

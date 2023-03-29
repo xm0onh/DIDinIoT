@@ -3,23 +3,24 @@ import fs from "fs";
 import fse from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
+import { updateZKP } from "../abstract/abstract.js";
 
-async function DeployVerifierContract() {
+async function DeployVerifierContract(claim, from, to) {
   const provider = new ethers.providers.JsonRpcProvider(
     "http://10.0.0.98:8545"
   );
 
   const wallet = new ethers.Wallet(
-    "4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d",
+    "5151216846c0c2d1f9cd6b9ad20a531c17858b66cd08ddf6be96570f62c2516b",
     provider
   );
 
   const abi = fs.readFileSync(
-    "src/privacy/contracts/_src_privacy_contracts_verifier_sol_Verifier.abi",
+    "src/privacy/contracts/src_privacy_contracts_verifier_sol_Verifier.abi",
     "utf8"
   );
   const binary = fs.readFileSync(
-    "src/privacy/contracts/_src_privacy_contracts_verifier_sol_Verifier.bin",
+    "src/privacy/contracts/src_privacy_contracts_verifier_sol_Verifier.bin",
     "utf8"
   );
 
@@ -37,15 +38,10 @@ async function DeployVerifierContract() {
   let proof = data.proof;
   let input = data.inputs;
 
-  const test = await contract.verifyTx(proof, input);
-  console.log(test);
+  await updateZKP(claim, from, to, input, proof, contract.address);
+  const out = await contract.verifyTx(proof, input);
+  console.log(out);
+  return out;
 }
-
-DeployVerifierContract()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
 
 export { DeployVerifierContract };

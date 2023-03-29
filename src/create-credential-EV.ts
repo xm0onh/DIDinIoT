@@ -9,7 +9,7 @@ async function main() {
       type: ["VerifiableCredential", "EVCredential"],
       save: true,
       credentialSubject: {
-        name: "Vehicle 1 CIBC",
+        name: "Vehicle 2",
         owner: true,
         type: "ElectricVehicle",
         brand: "Tesla",
@@ -22,6 +22,7 @@ async function main() {
         chargingRate: 150, //kW
         currentCharge: 70, // percent
         chargingSpeed: 100, // X miles per hour
+        desiredPrice: 0.5, // $ per kWh
         location: {
           latitude: 49.886544,
           longitude: -119.496269,

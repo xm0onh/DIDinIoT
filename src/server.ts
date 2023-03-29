@@ -3,6 +3,7 @@ import sqlite3 from "sqlite3";
 import { agent } from "./veramo/setup.js";
 import { InsertZKSData, updateZKP } from "./abstract/abstract.js";
 import { finder as EVSPFinder } from "./EVSP_Finder/EVSPFinder.js";
+import { PriceProof } from "./abstract/PriceProof.js";
 const app = express();
 const port = 8085;
 
@@ -201,6 +202,25 @@ app.get("/FindEVSP/:hash", async (req: Request, res: Response) => {
     res.json(bestEVSP);
   } catch (err) {
     res.status(500).send("Failed: " + err);
+  }
+});
+
+app.get("/Proof/:claim/:from/:to", async (req: Request, res: Response) => {
+  const from = req.params.from;
+  const to = req.params.to;
+  const claim = req.params.claim;
+  InsertZKSData(claim, from, to, "", "", "");
+  if (claim == "price") {
+    try {
+      const out = await PriceProof(from, to);
+      res.json(JSON.stringify(out));
+    } catch (err) {
+      console.error(err);
+      res.json("false");
+    }
+  } else if (claim === "owner") {
+  } else {
+    res.json("No Action");
   }
 });
 
