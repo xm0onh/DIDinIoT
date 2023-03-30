@@ -1,8 +1,3 @@
-import { ethers } from "ethers";
-import fs from "fs";
-import fse from "fs-extra";
-import path from "path";
-import { fileURLToPath } from "url";
 import sqlite3 from "sqlite3";
 import { agent } from "../veramo/setup.js";
 
@@ -10,7 +5,6 @@ const db = new sqlite3.Database("database.sqlite", (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log("Connected to the database.");
 });
 
 async function InsertZKSData(claim, sender, receiver, proof, input, contract) {
@@ -62,26 +56,16 @@ async function updateZKP(
   }
 }
 
-async function getAllEVSPVCs(EVSP_DID) {
-  try {
-    const row = await new Promise<any>((resolve, reject) => {
-      db.all(
-        "SELECT raw FROM credential WHERE issuerDid = ?",
-        [[EVSP_DID]],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(row);
-        }
-      );
-    });
-
-    if (row) {
-      return JSON.parse(JSON.stringify(row));
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
+async function getAllEVSPVCs() {
+  const EVSP = await agent.didManagerGetByAlias({ alias: "EVSP" });
+  const EVSP_VC = await agent.dataStoreORMGetVerifiableCredentials({
+    where: [
+      {
+        column: "issuer",
+        value: [EVSP.did],
+      },
+    ],
+  });
+  console.log(EVSP_VC);
 }
 export { InsertZKSData, updateZKP, getAllEVSPVCs };
