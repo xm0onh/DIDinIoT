@@ -88,12 +88,19 @@ app.get("/verify/:hash", async (req: Request, res: Response) => {
     const verifiableCredential = await agent.dataStoreGetVerifiableCredential({
       hash,
     });
-    const result = await agent.verifyCredential({
-      credential: {
-        ...verifiableCredential,
-      },
-    });
-    res.json({ verified: result.verified });
+    const start = new Date().getTime();
+    let elapsed = 0;
+    const result = await agent
+      .verifyCredential({
+        credential: {
+          ...verifiableCredential,
+        },
+      })
+      .then((result) => {
+        elapsed = new Date().getTime() - start;
+        console.log(elapsed / 1000);
+        res.json({ verified: result.verified });
+      });
   } catch (err) {
     res.status(500).send("Verification failed: " + err);
   }
