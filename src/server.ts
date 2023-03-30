@@ -17,6 +17,33 @@ const db = new sqlite3.Database("database.sqlite", (err) => {
 app.use(express.json());
 app.set("json spaces", 2);
 // Get EV credential by hash
+
+app.get("/EV/all", async (req: Request, res: Response) => {
+  const EV = await agent.didManagerGetByAlias({ alias: "EV" });
+  const EV_VC = await agent.dataStoreORMGetVerifiableCredentials({
+    where: [
+      {
+        column: "issuer",
+        value: [EV.did],
+      },
+    ],
+  });
+  res.json(EV_VC);
+});
+
+app.get("/EVSP/all", async (req: Request, res: Response) => {
+  const EV = await agent.didManagerGetByAlias({ alias: "EVSP" });
+  const EVSP_VC = await agent.dataStoreORMGetVerifiableCredentials({
+    where: [
+      {
+        column: "issuer",
+        value: [EV.did],
+      },
+    ],
+  });
+  res.json(EVSP_VC);
+});
+
 app.get("/EV/:hash", async (req: Request, res: Response) => {
   const hash = req.params.hash;
   const row = await new Promise<any>((resolve, reject) => {
