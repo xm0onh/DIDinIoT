@@ -8,10 +8,10 @@ import {
 } from "typeorm";
 
 @Entity("privacy")
-@Index(["from", "to", "claim"], { unique: false })
+@Index(["from", "to", "contract"], { unique: false })
 export class Privacy extends BaseEntity {
   @PrimaryColumn()
-  claim: string;
+  contract: string;
 
   @Column({ type: "varchar", nullable: true })
   from?: string;
@@ -26,5 +26,5 @@ export class Privacy extends BaseEntity {
   input?: string;
 
   @Column({ type: "varchar", nullable: true })
-  contract?: string;
+  claim?: string;
 }

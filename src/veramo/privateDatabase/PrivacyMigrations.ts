@@ -19,16 +19,16 @@ export class PrivacyPreserving1447159020002 implements MigrationInterface {
       new Table({
         name: getTableName("privacy"),
         columns: [
-          { name: "claim", type: "varchar", isPrimary: true },
+          { name: "claim", type: "varchar", isNullable: true },
           { name: "from", type: "varchar", isNullable: true },
           { name: "to", type: "varchar", isNullable: true },
           { name: "proof", type: "varchar", isNullable: true },
           { name: "input", type: "varchar", isNullable: true },
-          { name: "contract", type: "varchar", isNullable: true },
+          { name: "contract", type: "varchar", isPrimary: true },
         ],
         indices: [
           {
-            columnNames: ["from", "to", "claim"],
+            columnNames: ["from", "to", "contract"],
             isUnique: false,
           },
         ],
