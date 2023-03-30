@@ -10,20 +10,19 @@ import {
 async function finder(EV, priority, price, time) {
   setPriority(priority);
   SetEVPriceTime(price, time);
-  const EVSP_DID = await agent.didManagerGetByAlias({ alias: "EVSP" });
-  const VCs = await getAllEVSPVCs(EVSP_DID.did);
+  const VCs = await getAllEVSPVCs();
   let temp = [];
-  VCs.map((vc) => {
-    temp = [...temp, JSON.parse(vc.raw)];
-  });
+  // VCs.map((vc) => {
+  //   temp = [...temp, JSON.parse(vc.raw)];
+  // });
 
-  for (let i = 0; i < temp.length; i++) {
-    temp[i] = temp[i].credentialSubject;
-  }
+  // for (let i = 0; i < temp.length; i++) {
+  //   temp[i] = temp[i].credentialSubject;
+  // }
 
-  const graph = generateWeightedGraph(EV, temp, priority);
-  //   console.log(JSON.parse(JSON.stringify(graph)).adjacencyList);
-  return findBestMatchingEVSP(graph, EV[0].name);
+  // const graph = generateWeightedGraph(EV, temp, priority);
+  // //   console.log(JSON.parse(JSON.stringify(graph)).adjacencyList);
+  // return findBestMatchingEVSP(graph, EV[0].name);
 }
 
 export { finder };
