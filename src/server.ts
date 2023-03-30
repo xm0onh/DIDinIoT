@@ -4,6 +4,7 @@ import { agent } from "./veramo/setup.js";
 import { InsertZKSData, updateZKP } from "./abstract/abstract.js";
 import { finder as EVSPFinder } from "./EVSP_Finder/EVSPFinder.js";
 import { PriceProof } from "./abstract/PriceProof.js";
+import { OwnershipProof } from "./abstract/OwnershipProof.js";
 const app = express();
 const port = 8085;
 
@@ -11,7 +12,6 @@ const db = new sqlite3.Database("database.sqlite", (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log("Connected to the database. server");
 });
 
 app.use(express.json());
@@ -239,13 +239,20 @@ app.get("/Proof/:claim/:from/:to", async (req: Request, res: Response) => {
   InsertZKSData(claim, from, to, "", "", "");
   if (claim == "price") {
     try {
-      const out = await PriceProof(from, to);
-      res.json(JSON.stringify(out));
+      await PriceProof(from, to);
+      res.json("true");
     } catch (err) {
       console.error(err);
       res.json("false");
     }
   } else if (claim === "owner") {
+    try {
+      await OwnershipProof(from, to);
+      res.json("true");
+    } catch (err) {
+      console.error(err);
+      res.json("false");
+    }
   } else {
     res.json("No Action");
   }

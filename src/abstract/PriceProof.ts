@@ -6,7 +6,6 @@ The EV will verify the proof.
 
 import { GenerateProof } from "../privacy/generate-proof.js";
 import { DeployVerifierContract } from "../privacy/deployContract.js";
-import { agent } from "../veramo/setup.js";
 
 async function PriceProof(EV, EVSP) {
   //   const price = [
@@ -16,7 +15,7 @@ async function PriceProof(EV, EVSP) {
   const start = new Date().getTime();
   let elapsed = 0;
   const price = ["4", "16"];
-  await GenerateProof(price);
+  await GenerateProof("price", price);
   const out = await DeployVerifierContract("price", EV, EVSP).then(() => {
     elapsed = new Date().getTime() - start;
   });

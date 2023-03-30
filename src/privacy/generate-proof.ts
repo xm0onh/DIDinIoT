@@ -23,12 +23,19 @@ function runCommand(command: string) {
   });
 }
 
-async function GenerateProof(price) {
+async function GenerateProof(type, input) {
   const zokratesProvider = await initialize();
 
   const __filename = fileURLToPath(import.meta.url);
   const parentFolder = path.dirname(__filename);
-  const rawdata = fs.readFileSync(parentFolder + "/price.zok");
+  let rawdata;
+  if (type === "price") {
+    rawdata = fs.readFileSync(parentFolder + "/price.zok");
+  } else if (type === "owner") {
+    console.log("owner is running");
+    rawdata = fs.readFileSync(parentFolder + "/ownership.zok");
+  }
+
   const source = rawdata.toString();
 
   // compilation
@@ -38,7 +45,7 @@ async function GenerateProof(price) {
   console.log("Constraint Count ->>>>", artifacts.constraintCount);
 
   // computation
-  const { witness, output } = zokratesProvider.computeWitness(artifacts, price);
+  const { witness, output } = zokratesProvider.computeWitness(artifacts, input);
 
   // run setup
   const keypair = zokratesProvider.setup(artifacts.program);

@@ -41,7 +41,6 @@ async function DeployVerifierContract(claim, from, to) {
   await updateZKP(claim, from, to, input, proof, contract.address);
   const out = await contract.verifyTx(proof, input);
   console.log(out);
-  return out;
 }
 
 export { DeployVerifierContract };
